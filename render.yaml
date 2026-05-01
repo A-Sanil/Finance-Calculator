@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: agentic-traversal-api
+    runtime: python
+    runtimeVersion: 3.9
+    buildCommand: pip install -r requirements.txt && pip install apscheduler alpaca-trade-api aiofiles
+    startCommand: python -m uvicorn --app-dir src quant_agent.api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.6
+      - key: APCA_API_BASE_URL
+        value: https://paper-api.alpaca.markets
+      - key: APCA_API_KEY_ID
+        sync: false
+      - key: APCA_API_SECRET_KEY
+        sync: false
