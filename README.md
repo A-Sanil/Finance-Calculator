@@ -27,6 +27,10 @@ This repository starts with the backend scaffold only. The first implementation 
 - Ingestion is adapter-driven, so new source types can be added without changing the API layer.
 - The current retrieval and backtest implementations are intentionally lightweight and deterministic while the platform is still being built out.
 
+## README Assets
+
+See [docs/readme_images.md](docs/readme_images.md) for a concrete list of images to add to this README, including an architecture diagram, API screenshot, recommendation report preview, and backtest chart.
+
 ## Run locally
 
 ```bash

@@ -1,12 +1,20 @@
 from __future__ import annotations
 
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
 
 from quant_agent.schemas import BacktestRequest, BacktestResponse, IngestRequest, IngestResponse, SignalRequest, FusedRecommendation
 from quant_agent.services import AgentService
+from quant_agent.recommendations import RecommendationEngine
 
 app = FastAPI(title="Agentic Traversal of Unstructured Data", version="0.1.0")
 service = AgentService()
+recommendation_engine = RecommendationEngine()
+
+
+class RecommendationRequest(BaseModel):
+    tickers: list[str] = Field(default_factory=list)
+    sec_ciks: dict[str, str] = Field(default_factory=dict)
 
 
 @app.get("/health")
@@ -30,3 +38,9 @@ def generate_signals(request: SignalRequest) -> FusedRecommendation:
 @app.post("/backtest", response_model=BacktestResponse)
 def run_backtest(request: BacktestRequest) -> BacktestResponse:
     return service.backtest(request)
+
+
+@app.post("/recommendations/markdown")
+def build_recommendation_markdown(request: RecommendationRequest) -> dict[str, str]:
+    report = recommendation_engine.build_report(request.tickers, request.sec_ciks)
+    return {"markdown": report.to_markdown()}
